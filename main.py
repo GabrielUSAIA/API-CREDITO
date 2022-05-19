@@ -7,17 +7,15 @@ import joblib
 from sklearn import pipeline
 import uvicorn
 import boto3
-import joblib
 import os
+
+app =FastAPI()
 
 s3 = boto3.resource('s3', 'us-east-1')
 s3.meta.client.download_file('german-credit-model-2022', 'models/pipeline1.joblib','pipeline1.joblib')
 s3.meta.client.download_file('german-credit-model-2022', 'models/model01.joblib','model01.joblib')
 transformer = joblib.load('pipeline1.joblib')
 model = joblib.load('model01.joblib')
-
-app =FastAPI()
-
 
 @app.post("/predict")
 async def predcit(sexo :str=Form(...), 
